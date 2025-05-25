@@ -6,10 +6,8 @@
 
 using namespace std;
 
-int parallelQuickSort(std::vector<int>& arr, int argc, char** argv) {
-    // Initialize MPI
-    MPI_Init(&argc, &argv);
-
+int parallelQuickSort(std::vector<int>& arr) {
+    
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -56,7 +54,7 @@ int parallelQuickSort(std::vector<int>& arr, int argc, char** argv) {
         // Send the chunks to all processes
         vector<int> local_chunk;
         int chunk_size;
-        for (int i = 0; i < size; ++i) {
+        for (int i = 1; i < size; ++i) {
             chunk_size = chunks[i].size();
             MPI_Send(&chunk_size, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
             if (chunk_size > 0) {
@@ -66,11 +64,11 @@ int parallelQuickSort(std::vector<int>& arr, int argc, char** argv) {
 
         // Sort the local chunk
         local_chunk = chunks[0]; // Master process sorts its own chunk
-        // std::qsort(local_chunk.begin(), local_chunk.end());
+        quickSort(local_chunk);
+        sorted_array = local_chunk; // Initialize sorted_array with the master's local chunk
 
-        
 
-        for (int i = 0; i < size; ++i) {
+        for (int i = 1; i < size; ++i) {
             MPI_Recv(&chunk_size, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             if (chunk_size > 0) {
                 local_chunk.resize(chunk_size);
@@ -79,34 +77,31 @@ int parallelQuickSort(std::vector<int>& arr, int argc, char** argv) {
             }
         }
 
+        // Return the sorted array to the master process
+        arr = sorted_array;
+
     } else {
         // Other processes receive their chunks
         int chunk_size;
         MPI_Recv(&chunk_size, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
         vector<int> local_chunk(chunk_size);
         if (chunk_size > 0) {
             MPI_Recv(local_chunk.data(), chunk_size, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
 
         // Sort the local chunk
-        // std::qsort(local_chunk.begin(), local_chunk.end());
+        quickSort(local_chunk);
 
         // Send the sorted local chunk back to the master process
         MPI_Send(&chunk_size, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-        MPI_Send(local_chunk.data(), chunk_size, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        if (chunk_size > 0) {
+            // Send the sorted local chunk back to the master process
+            MPI_Send(local_chunk.data(), chunk_size, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        }
     }
 
-    // Finalize MPI
-    MPI_Finalize();
     
-    // If this is the master process, print the sorted array
-    if (rank == 0) {
-        cout << "Sorted array: ";
-        for (const auto& val : sorted_array) {
-            cout << val << " ";
-        }
-        cout << endl;
-    }
 
     return 0;
 }
