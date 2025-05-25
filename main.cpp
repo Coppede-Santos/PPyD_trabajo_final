@@ -5,6 +5,7 @@
 #include "secuential/quickSort.cpp" 
 #include "utils/fileReader.cpp"
 #include "utils/checkSorted.cpp"
+#include "parallel/quicksort.cpp"
 
 using namespace std;
 
@@ -24,7 +25,9 @@ int main() {
         // Start timer 
         auto start = chrono::high_resolution_clock::now();
 
-        quickSort(row);
+
+        parallelQuickSort(row); // Call the parallel quicksort function
+        
    
         // End timer
         auto end = chrono::high_resolution_clock::now();
