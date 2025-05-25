@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char** argv) {
     string filePath = "numeros_aleatorios.csv"; // Path to the CSV file
 
     vector<vector<int>> data = readFile(filePath);
@@ -26,7 +26,7 @@ int main() {
         auto start = chrono::high_resolution_clock::now();
 
 
-        parallelQuickSort(row); // Call the parallel quicksort function
+        parallelQuickSort(row, argc, argv);
         
    
         // End timer
