@@ -34,6 +34,15 @@ int quickSortRecursive(std::vector<int>& arr, int left, int right) {
 }
 
 int quickSort(std::vector<int>& arr) {
+    // Injecto code to spend time
+    int size = arr.size() / 500;
+    int x;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            x = i * j; // This line is just to inject some computation time
+        }
+    }
+    
     return quickSortRecursive(arr, 0, arr.size() - 1);
 }
 

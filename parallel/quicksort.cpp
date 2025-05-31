@@ -16,10 +16,22 @@ int parallelQuickSort(std::vector<int>& arr) {
     vector<int> sorted_array; // Define sorted_array here to make it accessible later
     if (rank == 0) {
         // Calculate the sum of all elements
-        int sum = 0;
+        long long sum = 0;
         for (int i = 0; i < arr.size(); ++i) {
+            if (arr[i] < 0) {
+                cerr << "Negative values are not allowed in the array." << endl;
+                return -1; // Return an error code
+            }
+
             sum += arr[i];
         }
+
+        if (sum == 0) {
+            // If the sum is zero, all elements are zero, so we can return the original array
+            sorted_array = arr;
+            return 0;
+        }
+
 
         // The number of pivots is equal to the number of processes minus one
         // Get the pivot values to distribute between processes
@@ -29,8 +41,8 @@ int parallelQuickSort(std::vector<int>& arr) {
         vector<int> pivots(size - 1);
         int current_pivot =  0;
         for (int i = 0; i < size - 1; ++i) {
-            pivots[i] = current_pivot;
             current_pivot += pivot_gap;
+            pivots[i] = current_pivot;
         }
 
         vector<vector<int>> chunks(size);
