@@ -63,6 +63,11 @@ int parallelQuickSort(std::vector<int>& arr) {
             }
         }
 
+        // Log the chunks size 
+        for (int i = 0; i < size; ++i) {
+            cout << "Chunk " << i << " size: " << chunks[i].size() << endl;
+        }
+
         // Send the chunks to all processes
         vector<int> local_chunk;
         int chunk_size;
