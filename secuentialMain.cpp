@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
         auto start = chrono::high_resolution_clock::now();
 
 
-        parallelQuickSort(row);
+        quickSort(row);
         
    
         // End timer
