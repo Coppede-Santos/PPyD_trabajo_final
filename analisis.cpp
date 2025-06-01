@@ -10,7 +10,6 @@
 #include "utils/fileReader.cpp"
 #include "utils/checkSorted.cpp"
 #include "parallel/quicksort.cpp"
-
 // The code is compiled with:
 // mpic++ analisis.cpp -o analisis -std=c++17
 // Code to run:
