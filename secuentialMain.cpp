@@ -9,6 +9,11 @@
 
 using namespace std;
 
+// The code is compiled with:
+// mpic++ secuentialMain.cpp -o sMain -std=c++17
+// Code to run:
+// mpirun -np 4 ./sMain
+
 int main(int argc, char** argv) {
     // Initialize MPI
     MPI_Init(&argc, &argv);

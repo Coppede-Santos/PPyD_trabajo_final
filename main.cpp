@@ -8,6 +8,11 @@
 #include "parallel/quicksort.cpp"
 
 using namespace std;
+//El codigo se compila con:
+// mpic++ main.cpp -o main -std=c++17
+// codigo para ejecutar:
+// mpirun -np 4 ./main
+
 
 int main(int argc, char** argv) {
     // Initialize MPI
